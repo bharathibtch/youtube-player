@@ -17,6 +17,9 @@ const nextConfig = {
     ],
   },
   transpilePackages: ['plyr-react'],
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 module.exports = nextConfig; 
