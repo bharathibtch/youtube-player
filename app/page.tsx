@@ -6,6 +6,7 @@ import { useVideoStore } from '@/app/store/videoStore';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { History } from '@/components/History';
 
 export default function Home() {
   const [inputUrl, setInputUrl] = useState('');
@@ -15,6 +16,16 @@ export default function Home() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputUrl) {
+      // Save to history in localStorage
+      const newHistoryItem = {
+        url: inputUrl,
+        timestamp: new Date(),
+      };
+      
+      const existingHistory = localStorage.getItem('videoHistory');
+      const history = existingHistory ? JSON.parse(existingHistory) : [];
+      localStorage.setItem('videoHistory', JSON.stringify([newHistoryItem, ...history]));
+
       setVideoUrl(inputUrl);
       setLastPlayedTime(0);
       setLastSavedTime(new Date());
@@ -55,6 +66,7 @@ export default function Home() {
           </Button>
         </form>
       </Card>
+      <History />
     </main>
   );
 }
