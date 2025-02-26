@@ -55,10 +55,10 @@ export function History() {
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold text-zinc-800">Recent Videos</h2>
           <Button 
-            variant="destructive" 
+            variant="link"
             size="sm"
             onClick={clearHistory}
-            className="bg-red-600 hover:bg-red-700"
+            className="text-gray-600 hover:text-black p-0 h-auto font-medium transition-colors no-underline hover:no-underline"
           >
             Clear History
           </Button>
