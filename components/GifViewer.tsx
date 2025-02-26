@@ -89,7 +89,7 @@ export function GifViewer() {
   
   return (
     <Card className="p-6 space-y-4 w-full max-w-3xl shadow-lg">
-      <h1 className="text-2xl font-bold text-center">Loading Laughs... 😄</h1>
+      <h1 className="text-2xl font-bold text-center">GIFs... 😄</h1>
       <div className="relative rounded-lg overflow-hidden">
         {isLoading && <LoadingSkeleton />}
         {selectedGif && (
