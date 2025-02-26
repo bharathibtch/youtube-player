@@ -8,10 +8,10 @@ import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import 'plyr/dist/plyr.css';
-import type { PlyrProps } from 'plyr-react';
+import type { PlyrInstance } from 'plyr-react';
 
 // Dynamically import Plyr with no SSR
-const Plyr = dynamic(() => import('plyr-react'), {
+const PlyrComponent = dynamic(() => import('plyr-react'), {
   ssr: false,
   loading: () => (
     <div className="relative aspect-video w-full max-w-4xl bg-gray-100 animate-pulse">
@@ -22,11 +22,9 @@ const Plyr = dynamic(() => import('plyr-react'), {
   ),
 });
 
-
 export function VideoPlayer() {
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
-  const [playerReady, setPlayerReady] = useState(false);
   const { 
     videoUrl, 
     setLastPlayedTime,
@@ -36,7 +34,7 @@ export function VideoPlayer() {
     isPlaying 
   } = useVideoStore();
   
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<PlyrInstance>(null);
   const initialSeekDone = useRef(false);
 
   // Extract video ID from YouTube URL
@@ -55,7 +53,9 @@ export function VideoPlayer() {
     tag.src = 'https://www.youtube.com/iframe_api';
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+  }, []);
 
+  useEffect(() => {
     return () => {
       const currentPlayer = playerRef.current;
       if (currentPlayer) {
@@ -67,10 +67,7 @@ export function VideoPlayer() {
 
   interface PlyrEventDetail {
     detail: {
-      plyr: {
-        currentTime: number;
-        play: () => void;
-      };
+      plyr: PlyrInstance;
     };
   }
 
@@ -84,7 +81,6 @@ export function VideoPlayer() {
     play: () => setIsPlaying(true),
     pause: () => setIsPlaying(false),
     ready: (event: PlyrEventDetail) => {
-      setPlayerReady(true);
       if (!initialSeekDone.current && event?.detail?.plyr) {
         const startTime = calculateResumeTime();
         event.detail.plyr.currentTime = startTime;
@@ -130,7 +126,7 @@ export function VideoPlayer() {
     <Card className="p-6 w-full max-w-3xl shadow-lg">
       <div className="relative aspect-video w-full">
         {videoId ? (
-          <Plyr
+          <PlyrComponent
             ref={playerRef}
             {...plyrProps}
           />

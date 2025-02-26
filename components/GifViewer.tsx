@@ -27,7 +27,7 @@ export function GifViewer() {
     // Reset error and loading states when changing GIFs
     setIsError(false);
     setIsLoading(true);
-  }, []);
+  }, [funnyGifs]);
   
   // Add error boundary handling
   if (typeof window === 'undefined') {
